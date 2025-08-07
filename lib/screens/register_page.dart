@@ -146,7 +146,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         onPressed: () {
-                          // TODO: Save logic
+                          Navigator.pushReplacementNamed(context, '/register_page2');
                         },
                         child: const Text(
                           'Save & Continue',
@@ -158,7 +158,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       // Back to Login
                       TextButton(
                         onPressed: () {
-                          Navigator.pushReplacementNamed(context, '/login_page');
+
                         },
                         child: const Text(
                           'Back to Login',

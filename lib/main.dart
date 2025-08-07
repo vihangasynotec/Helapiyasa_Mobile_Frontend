@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'screens/register_page.dart';
+import 'screens/register_page2.dart';
 import 'screens/welcome_page.dart';
 import 'screens/tutorial_step_one.dart';
 import 'screens/tutorial_step_two.dart';
@@ -29,7 +29,8 @@ class MyApp extends StatelessWidget {
         '/tutorial_step_two': (context) => const TutorialStepTwo(),
         '/tutorial_step_three': (context) => const TutorialStepThree(),
         '/login_page': (context) => const LoginScreen(),
-        '/register_page': (context) => const RegisterScreen(),
+        '/register_page': (context) => const RegisterPersonalInfoScreen(),
+        '/register_page2': (context) => const RegisterPersonalInfoScreen(),
       },
     );
   }
