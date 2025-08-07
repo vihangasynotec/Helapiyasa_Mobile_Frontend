@@ -205,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 5),
                         ),
                         onPressed: () {
-                          // TODO: Login action
+
                         },
                         child: const Text(
                           'Login Account',
@@ -217,7 +217,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       // Create New Account
                       TextButton(
                         onPressed: () {
-                          // TODO: Navigate to sign up
+                          Navigator.pushReplacementNamed(context, '/register_page'); // Navigate to Register Page
                         },
                         child: const Text(
                           'Create New Account',
