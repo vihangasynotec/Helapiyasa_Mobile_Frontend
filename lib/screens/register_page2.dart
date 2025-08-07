@@ -87,6 +87,7 @@ class _RegisterPersonalInfoScreenState extends State<RegisterPersonalInfoScreen>
                       Row(
                         children: [
                           Expanded(
+                            
                             flex: 2,
                             child: _buildDropdown(countryCodes, selectedCountryCode,
                                     (val) => setState(() => selectedCountryCode = val), 'Code'),
@@ -221,6 +222,14 @@ class _RegisterPersonalInfoScreenState extends State<RegisterPersonalInfoScreen>
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
           borderSide: const BorderSide(color: Colors.orange, width: 1.5),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.orange, width: 1.5),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+          borderSide: const BorderSide(color: Colors.orange, width: 2),
         ),
       ),
       items: items.map((item) => DropdownMenuItem(value: item, child: Text(item))).toList(),
