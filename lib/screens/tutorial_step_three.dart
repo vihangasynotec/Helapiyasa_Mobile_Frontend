@@ -28,7 +28,7 @@ class TutorialStepThree extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 290),
+            // const SizedBox(height: 290),
 
             // Image
             Image.asset(

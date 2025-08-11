@@ -47,7 +47,12 @@ flutter:
     - assets/category/ca_icon4.png
     - assets/category/ca_icon5.png
     - assets/category/ca_icon6.png
-
+    - assets/brands/brand1.png
+    - assets/brands/brand2.png
+    - assets/brands/brand3.png
+    - assets/brands/brand4.png
+    - assets/brands/brand5.png
+    - assets/brands/brand6.png
   # Uncomment and configure if you plan to use custom fonts
   # fonts:
   #   - family: YourFontFamily

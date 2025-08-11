@@ -22,7 +22,7 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -75,7 +75,7 @@ class _DashboardPageState extends State<DashboardPage> {
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               decoration: BoxDecoration(
-                color: Colors.grey[100],
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(12),
                 border: Border.all(color: Colors.orange[300]!),
               ),
@@ -111,6 +111,9 @@ class _DashboardPageState extends State<DashboardPage> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.orange,
         unselectedItemColor: Colors.grey,
+        iconSize: 37, // Custom icon size
+        selectedFontSize: 12, // Optional: adjust label size when selected
+        unselectedFontSize: 10, // Optional: adjust label size when unselected
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.grid_view),

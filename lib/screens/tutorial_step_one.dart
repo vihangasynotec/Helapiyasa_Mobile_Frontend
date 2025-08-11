@@ -33,7 +33,7 @@ class TutorialStepOne extends StatelessWidget {
               ),
             ),
 
-            const SizedBox(height: 290),
+            // const SizedBox(height: 290),
 
             // Illustration image
             Image.asset(
