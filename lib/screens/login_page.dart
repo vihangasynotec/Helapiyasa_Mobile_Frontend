@@ -85,7 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 8),
                       const Text(
-                        'Lorem Ipsum is simply dummy text of the printing and typesetting industry.',
+                        'Sign in to continue and explore all your personalized features.',
                         textAlign: TextAlign.center,
                         style: TextStyle(fontSize: 13, color: Colors.black54),
                       ),
@@ -205,7 +205,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           padding: const EdgeInsets.symmetric(vertical: 5),
                         ),
                         onPressed: () {
-
+                          Navigator.pushReplacementNamed(context, '/dashboard_page'); // Navigate to Dashboard Page
                         },
                         child: const Text(
                           'Login Account',

@@ -1,28 +1,51 @@
 import 'package:flutter/material.dart';
 
-class RegisterPersonalInfoScreen extends StatefulWidget {
-  const RegisterPersonalInfoScreen({super.key});
+class RegisterPersonalDetailsScreen extends StatefulWidget {
+  const RegisterPersonalDetailsScreen({super.key});
 
   @override
-  State<RegisterPersonalInfoScreen> createState() => _RegisterPersonalInfoScreenState();
+  State<RegisterPersonalDetailsScreen> createState() => _RegisterPersonalDetailsScreenState();
 }
 
-class _RegisterPersonalInfoScreenState extends State<RegisterPersonalInfoScreen> {
-  DateTime? selectedBirthday;
-  bool _obscurePassword = true;
-  String? selectedCountryCode = '+94';
-  String? selectedSecurityQuestion;
-
+class _RegisterPersonalDetailsScreenState extends State<RegisterPersonalDetailsScreen> {
+  final TextEditingController _firstNameController = TextEditingController();
+  final TextEditingController _lastNameController = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _dateOfBirthController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-  final TextEditingController _securityAnswerController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _phoneNumberController = TextEditingController();
 
-  final List<String> countryCodes = ['+94', '+91', '+1', '+44'];
-  final List<String> securityQuestions = [
-    'Your first pet\'s name?',
-    'Your mother\'s maiden name?',
-    'Your favorite teacher?',
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+  DateTime? selectedDate;
+
+  String? selectedCountryCode = '+94';
+
+  final List<Map<String, String>> countryCodes = [
+    {'code': '+94', 'flag': '🇱🇰', 'country': 'Sri Lanka'},
+    {'code': '+1', 'flag': '🇺🇸', 'country': 'USA'},
+    {'code': '+44', 'flag': '🇬🇧', 'country': 'UK'},
+    {'code': '+91', 'flag': '🇮🇳', 'country': 'India'},
+    {'code': '+61', 'flag': '🇦🇺', 'country': 'Australia'},
+    {'code': '+33', 'flag': '🇫🇷', 'country': 'France'},
+    {'code': '+49', 'flag': '🇩🇪', 'country': 'Germany'},
+    {'code': '+81', 'flag': '🇯🇵', 'country': 'Japan'},
   ];
+
+  @override
+  void dispose() {
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _emailController.dispose();
+    _usernameController.dispose();
+    _dateOfBirthController.dispose();
+    _passwordController.dispose();
+    _confirmPasswordController.dispose();
+    _phoneNumberController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,8 +62,29 @@ class _RegisterPersonalInfoScreenState extends State<RegisterPersonalInfoScreen>
           child: SingleChildScrollView(
             padding: const EdgeInsets.symmetric(horizontal: 24.0),
             child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                const SizedBox(height: 50),
+                Image.asset(
+                  'assets/logo.png',
+                  height: 50,
+                  width: 80,
+                ),
+                const SizedBox(height: 24),
+                const Text(
+                  'Join Us',
+                  style: TextStyle(
+                    fontSize: 40,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                const Text(
+                  'Create Free Account',
+                  style: TextStyle(fontSize: 18, color: Colors.black87),
+                ),
+                const SizedBox(height: 32),
+
                 Container(
                   padding: const EdgeInsets.all(24.0),
                   decoration: BoxDecoration(
@@ -48,7 +92,7 @@ class _RegisterPersonalInfoScreenState extends State<RegisterPersonalInfoScreen>
                     borderRadius: BorderRadius.circular(24),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withOpacity(0.3),
+                        color: Colors.grey.withValues(alpha: 0.3),
                         spreadRadius: 5,
                         blurRadius: 12,
                         offset: const Offset(0, 6),
@@ -59,58 +103,59 @@ class _RegisterPersonalInfoScreenState extends State<RegisterPersonalInfoScreen>
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const Text(
-                        'Personal Info',
+                        'Personal Details',
                         style: TextStyle(
-                          fontSize: 40,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black,
+                          color: Color(0xFFFF8300),
+                          fontSize: 22,
+                          fontWeight: FontWeight.w800,
                         ),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 4),
+                      const SizedBox(height: 8),
                       const Text(
-                        'Complete your registration',
-                        style: TextStyle(fontSize: 18, color: Colors.black87),
+                        'Please provide your personal information to create your account.',
                         textAlign: TextAlign.center,
+                        style: TextStyle(fontSize: 13, color: Colors.black54),
                       ),
                       const SizedBox(height: 24),
 
-                      _buildSectionTitle('Birthday'),
-                      _buildBirthdayPicker(),
+                      _buildDateOfBirthField(),
                       const SizedBox(height: 16),
 
-                      _buildSectionTitle('Password'),
                       _buildPasswordField(),
                       const SizedBox(height: 16),
 
-                      _buildSectionTitle('Phone Number'),
+                      _buildConfirmPasswordField(),
+                      const SizedBox(height: 16),
+
+                      // Phone Number section with country code dropdown
+                      const Text(
+                        'Phone Number',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
                       Row(
                         children: [
                           Expanded(
-                            
                             flex: 2,
-                            child: _buildDropdown(countryCodes, selectedCountryCode,
-                                    (val) => setState(() => selectedCountryCode = val), 'Code'),
+                            child: _buildCountryCodeDropdown(),
                           ),
                           const SizedBox(width: 8),
                           Expanded(
                             flex: 5,
                             child: _buildTextField(
-                              controller: _phoneController,
-                              hint: 'Phone Number',
+                              controller: _phoneNumberController,
+                              label: 'Phone Number',
+                              hint: '77 123 4567',
+                              icon: Icons.phone_outlined,
+                              keyboardType: TextInputType.phone,
                             ),
                           ),
                         ],
-                      ),
-                      const SizedBox(height: 16),
-
-                      _buildSectionTitle('Security Question'),
-                      _buildDropdown(securityQuestions, selectedSecurityQuestion,
-                              (val) => setState(() => selectedSecurityQuestion = val), 'Select question'),
-                      const SizedBox(height: 20),
-                      _buildTextField(
-                        controller: _securityAnswerController,
-                        hint: 'Your Answer',
                       ),
                       const SizedBox(height: 24),
 
@@ -124,16 +169,19 @@ class _RegisterPersonalInfoScreenState extends State<RegisterPersonalInfoScreen>
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         onPressed: () {
-                          // TODO: Handle account creation
+                          _handleRegistration();
                         },
                         child: const Text(
-                          'Create Account',
+                          'Save & Continue',
                           style: TextStyle(fontSize: 16),
                         ),
                       ),
                       const SizedBox(height: 12),
+
                       TextButton(
-                        onPressed: () => Navigator.pop(context),
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/login_page');
+                        },
                         child: const Text(
                           'Back to Login',
                           style: TextStyle(
@@ -153,105 +201,12 @@ class _RegisterPersonalInfoScreenState extends State<RegisterPersonalInfoScreen>
     );
   }
 
-  Widget _buildSectionTitle(String title) {
-    return Text(
-      title,
-      style: const TextStyle(
-        fontSize: 16,
-        fontWeight: FontWeight.w600,
-        color: Colors.black87,
-      ),
-
-    );
-  }
-
-  Widget _buildBirthdayPicker() {
-    return GestureDetector(
-      onTap: () async {
-        final DateTime? picked = await showDatePicker(
-          context: context,
-          initialDate: DateTime(2000, 1, 1),
-          firstDate: DateTime(1900),
-          lastDate: DateTime.now(),
-        );
-        if (picked != null) {
-          setState(() {
-            selectedBirthday = picked;
-          });
-        }
-      },
-      child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 16),
-        decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: Colors.orange, width: 1.5),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.grey.withOpacity(0.2),
-              spreadRadius: 1,
-              blurRadius: 4,
-              offset: const Offset(0, 2),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              selectedBirthday != null
-                  ? '${selectedBirthday!.month}/${selectedBirthday!.day}/${selectedBirthday!.year}'
-                  : 'Select Birthday',
-              style: const TextStyle(fontSize: 16, color: Colors.black87),
-            ),
-            const Icon(Icons.calendar_today, color: Colors.orange),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDropdown(List<String> items, String? selected, ValueChanged<String?> onChanged, String hint) {
-    return DropdownButtonFormField<String>(
-      value: selected,
-      decoration: InputDecoration(
-        hintText: hint,
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.orange, width: 1.5),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.orange, width: 1.5),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.orange, width: 2),
-        ),
-      ),
-      items: items.map((item) => DropdownMenuItem(value: item, child: Text(item))).toList(),
-      onChanged: onChanged,
-    );
-  }
-
-  Widget _buildPasswordField() {
-    return _buildTextField(
-      controller: _passwordController,
-      hint: 'Enter Password',
-      obscureText: _obscurePassword,
-      suffixIcon: IconButton(
-        icon: Icon(_obscurePassword ? Icons.visibility_off : Icons.visibility),
-        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
-      ),
-    );
-  }
-
   Widget _buildTextField({
     required TextEditingController controller,
+    required String label,
     required String hint,
+    IconData? icon,
+    TextInputType? keyboardType,
     bool obscureText = false,
     Widget? suffixIcon,
   }) {
@@ -260,7 +215,7 @@ class _RegisterPersonalInfoScreenState extends State<RegisterPersonalInfoScreen>
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.3),
+            color: Colors.grey.withValues(alpha: 0.3),
             spreadRadius: 1,
             blurRadius: 4,
             offset: const Offset(0, 2),
@@ -269,12 +224,17 @@ class _RegisterPersonalInfoScreenState extends State<RegisterPersonalInfoScreen>
       ),
       child: TextField(
         controller: controller,
+        keyboardType: keyboardType,
         obscureText: obscureText,
         decoration: InputDecoration(
+          labelText: label,
           hintText: hint,
+          prefixIcon: icon != null ? Icon(icon, color: Colors.orange) : null,
+          suffixIcon: suffixIcon,
           filled: true,
           fillColor: Colors.white,
-          suffixIcon: suffixIcon,
+          labelStyle: const TextStyle(color: Colors.black87),
+          hintStyle: TextStyle(color: Colors.grey[600]),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
             borderSide: const BorderSide(color: Colors.orange, width: 1.5),
@@ -290,5 +250,221 @@ class _RegisterPersonalInfoScreenState extends State<RegisterPersonalInfoScreen>
         ),
       ),
     );
+  }
+
+  Widget _buildDateOfBirthField() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withValues(alpha: 0.3),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: _dateOfBirthController,
+        readOnly: true,
+        onTap: () async {
+          final DateTime? picked = await showDatePicker(
+            context: context,
+            initialDate: DateTime(2000, 1, 1),
+            firstDate: DateTime(1900),
+            lastDate: DateTime.now(),
+            builder: (context, child) {
+              return Theme(
+                data: Theme.of(context).copyWith(
+                  colorScheme: Theme.of(context).colorScheme.copyWith(
+                    primary: Colors.orange,
+                    onPrimary: Colors.white,
+                    surface: Colors.white,
+                    onSurface: Colors.black,
+                  ),
+                  textButtonTheme: TextButtonThemeData(
+                    style: TextButton.styleFrom(
+                      foregroundColor: Colors.orange,
+                    ),
+                  ),
+                ),
+                child: child!,
+              );
+            },
+          );
+          if (picked != null) {
+            setState(() {
+              selectedDate = picked;
+              _dateOfBirthController.text = '${picked.day}/${picked.month}/${picked.year}';
+            });
+          }
+        },
+        decoration: InputDecoration(
+          labelText: 'Date of Birth',
+          hintText: 'Select your date of birth',
+          prefixIcon: const Icon(Icons.calendar_today, color: Colors.orange),
+          filled: true,
+          fillColor: Colors.white,
+          labelStyle: const TextStyle(color: Colors.black87),
+          hintStyle: TextStyle(color: Colors.grey[600]),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.orange, width: 1.5),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.orange, width: 1.5),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.orange, width: 2),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return _buildTextField(
+      controller: _passwordController,
+      label: 'Password',
+      hint: 'Enter your password',
+      icon: Icons.lock_outline,
+      obscureText: _obscurePassword,
+      suffixIcon: IconButton(
+        icon: Icon(
+          _obscurePassword ? Icons.visibility_off : Icons.visibility,
+          color: Colors.orange,
+        ),
+        onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
+      ),
+    );
+  }
+
+  Widget _buildConfirmPasswordField() {
+    return _buildTextField(
+      controller: _confirmPasswordController,
+      label: 'Confirm Password',
+      hint: 'Confirm your password',
+      icon: Icons.lock_outline,
+      obscureText: _obscureConfirmPassword,
+      suffixIcon: IconButton(
+        icon: Icon(
+          _obscureConfirmPassword ? Icons.visibility_off : Icons.visibility,
+          color: Colors.orange,
+        ),
+        onPressed: () => setState(() => _obscureConfirmPassword = !_obscureConfirmPassword),
+      ),
+    );
+  }
+
+  Widget _buildCountryCodeDropdown() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withValues(alpha: 0.3),
+            spreadRadius: 1,
+            blurRadius: 4,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: DropdownButtonFormField<String>(
+        value: selectedCountryCode,
+        onChanged: (String? newValue) {
+          setState(() {
+            selectedCountryCode = newValue;
+          });
+        },
+        decoration: InputDecoration(
+          labelText: 'Code',
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 8, vertical: 12),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.orange, width: 1.5),
+          ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.orange, width: 1.5),
+          ),
+          focusedBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(12),
+            borderSide: const BorderSide(color: Colors.orange, width: 2),
+          ),
+        ),
+        items: countryCodes
+            .map<DropdownMenuItem<String>>((Map<String, String> value) {
+          return DropdownMenuItem<String>(
+            value: value['code'],
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  value['flag']!,
+                  style: const TextStyle(fontSize: 14),
+                ),
+                const SizedBox(width: 4),
+                Flexible(
+                  child: Text(
+                    value['code']!,
+                    style: const TextStyle(
+                      color: Colors.black87,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }).toList(),
+        isExpanded: false,
+        icon: const Icon(Icons.arrow_drop_down, color: Colors.orange, size: 20),
+        dropdownColor: Colors.white,
+      ),
+    );
+  }
+
+  void _handleRegistration() {
+    // Validate all fields with null checks
+    if (_firstNameController.text.trim().isEmpty) {
+      return;
+    }
+    if (_lastNameController.text.trim().isEmpty) {
+      return;
+    }
+    if (_emailController.text.trim().isEmpty) {
+      return;
+    }
+    if (_usernameController.text.trim().isEmpty) {
+      return;
+    }
+    if (_dateOfBirthController.text.trim().isEmpty || selectedDate == null) {
+      return;
+    }
+    if (_passwordController.text.trim().isEmpty) {
+      return;
+    }
+    if (_confirmPasswordController.text.trim().isEmpty) {
+      return;
+    }
+    if (_passwordController.text != _confirmPasswordController.text) {
+      return;
+    }
+    if (_phoneNumberController.text.trim().isEmpty) {
+      return;
+    }
+    if (selectedCountryCode == null || selectedCountryCode!.isEmpty) {
+      return;
+    }
+
+    // Navigate to next screen or complete registration silently
+    Navigator.pushReplacementNamed(context, '/login_page');
   }
 }

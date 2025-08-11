@@ -12,7 +12,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   final TextEditingController _lastNameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -22,10 +21,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [
-              Colors.white,
-              Color(0xFFFFFFFF),
-            ],
+            colors: [Colors.white, Color(0xFFFFFFFF)],
           ),
         ),
         child: Center(
@@ -34,14 +30,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                // Logo
                 Image.asset(
-                  'assets/logo.png', // Replace with your logo asset
+                  'assets/logo.png',
                   height: 50,
                   width: 80,
                 ),
                 const SizedBox(height: 24),
-
                 const Text(
                   'Join Us',
                   style: TextStyle(
@@ -53,14 +47,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 const SizedBox(height: 4),
                 const Text(
                   'Create Free Account',
-                  style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.black87,
-                  ),
+                  style: TextStyle(fontSize: 18, color: Colors.black87),
                 ),
                 const SizedBox(height: 32),
 
-                // Registration card
                 Container(
                   padding: const EdgeInsets.all(24.0),
                   decoration: BoxDecoration(
@@ -95,7 +85,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 24),
 
-                      // First and Last Name
                       Row(
                         children: [
                           Expanded(
@@ -117,7 +106,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Email
                       _buildTextField(
                         controller: _emailController,
                         label: 'Email Address',
@@ -126,7 +114,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 16),
 
-                      // Username
                       _buildTextField(
                         controller: _usernameController,
                         label: 'Username',
@@ -135,7 +122,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 24),
 
-                      // Save Button
                       ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           backgroundColor: Colors.orange,
@@ -155,10 +141,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ),
                       const SizedBox(height: 12),
 
-                      // Back to Login
                       TextButton(
                         onPressed: () {
-
+                          Navigator.pushReplacementNamed(context, '/login_page');
                         },
                         child: const Text(
                           'Back to Login',
@@ -184,7 +169,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
     required String label,
     required String hint,
     IconData? icon,
-    bool obscureText = false,
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -200,7 +184,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
       ),
       child: TextField(
         controller: controller,
-        obscureText: obscureText,
         decoration: InputDecoration(
           labelText: label,
           hintText: hint,
