@@ -11,9 +11,9 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   int _selectedIndex = 0;
 
-  // Define pages for each tab (only Home is wired for now)
+  // Define pages for each tab
   final List<Widget> _pages = const [
-    MainDashboard_Page(), // Home
+    MainDashboard_Page(), // Default Home
     Center(child: Text('Shop Page')), // Placeholder
     Center(child: Text('Cart Page')), // Placeholder
     Center(child: Text('Profile Page')), // Placeholder
@@ -66,9 +66,45 @@ class _DashboardPageState extends State<DashboardPage> {
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(10),
-        child: MainPane(child: _pages[_selectedIndex]),
+      body: Column(
+        children: [
+          // Search Bar Section
+          Container(
+            padding: const EdgeInsets.all(16),
+            color: Colors.white,
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey[100],
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(color: Colors.orange[300]!),
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.search, color: Colors.orange),
+                  const SizedBox(width: 8),
+                  const Expanded(
+                    child: TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Search any Product...',
+                        border: InputBorder.none,
+                        hintStyle: TextStyle(color: Colors.black),
+                      ),
+                    ),
+                  ),
+                  IconButton(
+                    icon: const Icon(Icons.mic, color: Colors.orange),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
+            ),
+          ),
+          // Main Content
+          Expanded(
+            child: _pages[_selectedIndex],
+          ),
+        ],
       ),
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
@@ -99,53 +135,6 @@ class _DashboardPageState extends State<DashboardPage> {
           });
         },
       ),
-    );
-  }
-}
-
-class MainPane extends StatelessWidget {
-  final Widget child;
-  const MainPane({Key? key, required this.child}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        // 🔍 Search Bar
-        Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: Row(
-            children: [
-              const Icon(Icons.search, color: Colors.grey),
-              const SizedBox(width: 8),
-              const Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: 'Search any Product...',
-                    border: InputBorder.none,
-                  ),
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.mic, color: Colors.grey),
-                onPressed: () {},
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 16),
-
-        // 📦 Dynamic content
-        Expanded(
-          child: SingleChildScrollView(
-            child: child,
-          ),
-        ),
-      ],
     );
   }
 }

@@ -25,7 +25,28 @@ flutter:
     - assets/store_01.png
     - assets/store_02.png
     - assets/store_03.png
+    - assets/banner1.png
+    - assets/banner2.png
     - assets/logo.png
+    - assets/product/cosmatic_01.png
+    - assets/product/cosmatic_02.png
+    - assets/product/cosmatic_03.png
+    - assets/product/electronic_01.png
+    - assets/product/electronic_02.png
+    - assets/product/electronic_03.png
+    - assets/product/family_pack1.png
+    - assets/product/fashion_01.png
+    - assets/product/fashion_02.png
+    - assets/product/fashion_03.png
+    - assets/product/fashion_04.png
+    - assets/product/oil_01.png
+    - assets/product/oil_02.png
+    - assets/category/ca_icon1.png
+    - assets/category/ca_icon2.png
+    - assets/category/ca_icon3.png
+    - assets/category/ca_icon4.png
+    - assets/category/ca_icon5.png
+    - assets/category/ca_icon6.png
 
   # Uncomment and configure if you plan to use custom fonts
   # fonts:
