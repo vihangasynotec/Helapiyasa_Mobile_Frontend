@@ -101,13 +101,8 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
     final screenWidth = screenSize.width;
     final screenHeight = screenSize.height;
 
-    // Responsive padding
-    final horizontalPadding = _getResponsiveValue(
-      context,
-      mobile: 16.0,
-      tablet: 24.0,
-      desktop: 32.0,
-    );
+    // Mobile-focused responsive padding
+    final horizontalPadding = screenWidth < 360 ? 12.0 : 16.0; // Small phones vs regular phones
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -118,34 +113,28 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
           children: [
             // 🗂️ All Category
             _sectionTitle('All Category'),
-            SizedBox(height: _getResponsiveValue(context, mobile: 10, tablet: 12, desktop: 16)),
+            SizedBox(height: screenWidth < 360 ? 8 : 10),
 
-            // Responsive category icons
-            _isMobile(context)
-              ? _iconRow([
-                  Icons.all_inbox,
-                  Icons.chair,
-                  Icons.devices,
-                  Icons.brush,
-                  Icons.checkroom,
-                ])
-              : _iconGrid([
-                  Icons.all_inbox,
-                  Icons.chair,
-                  Icons.devices,
-                  Icons.brush,
-                  Icons.checkroom,
-                ]),
+            // Mobile-only category icons (removed duplicates)
+            _iconRow([
+              Icons.all_inbox,
+              Icons.chair,
+              Icons.devices,
+              Icons.brush,
+              Icons.checkroom,
+              Icons.vaccines,
+              Icons.local_drink,
+              Icons.health_and_safety,
+              Icons.bathroom,
+            ]),
 
-            SizedBox(height: _getResponsiveValue(context, mobile: 24, tablet: 28, desktop: 32)),
+            SizedBox(height: screenWidth < 360 ? 20 : 24),
 
             // 🚚 Banner Carousel
             SizedBox(
-              height: _getResponsiveValue(context, mobile: 220, tablet: 280, desktop: 350),
+              height: screenWidth < 360 ? 180 : 220, // Smaller for small phones
               child: ClipRRect(
-                borderRadius: BorderRadius.circular(
-                  _getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20)
-                ),
+                borderRadius: BorderRadius.circular(12),
                 child: PageView.builder(
                   controller: _pageController,
                   itemCount: bannerImages.length,
@@ -158,11 +147,11 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
                 ),
               ),
             ),
-            SizedBox(height: _getResponsiveValue(context, mobile: 24, tablet: 28, desktop: 32)),
+            SizedBox(height: screenWidth < 360 ? 20 : 24),
 
             // 🔥 Hot Deals
             _sectionTitle('Hot Deals'),
-            _responsiveProductSection([
+            _mobileProductSection([
               ProductModel(
                 name: 'Family Package 1',
                 price: 'LKR 10,899/-',
@@ -186,65 +175,95 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
                 reviews: 1,
                 imagePath: 'assets/product/fashion_01.png',
               ),
+              ProductModel(
+                name: 'Family Package 2',
+                price: 'LKR 8,999/-',
+                rating: 4.8,
+                reviews: 5,
+                isBestDeal: true,
+                imagePath: 'assets/product/family_pack1.png',
+              ),
+              ProductModel(
+                name: 'Natural Oil',
+                price: 'LKR 450/-',
+                rating: 4.9,
+                reviews: 3,
+                isBestDeal: true,
+                imagePath: 'assets/product/oil_01.png',
+              ),
             ]),
 
-            SizedBox(height: _getResponsiveValue(context, mobile: 24, tablet: 28, desktop: 32)),
+            SizedBox(height: screenWidth < 360 ? 20 : 24),
 
             // 🏆 Top Categories
             _sectionTitle('Top Categories'),
-            _responsiveProductSection([
+            _mobileProductSection([
               ProductModel(
-                name: 'Family Package 1',
-                price: 'LKR 10,899/-',
+                name: 'Electronics Hub',
+                price: 'LKR 15,500/-',
+                rating: 4.7,
+                reviews: 8,
+                imagePath: 'assets/product/electronic_01.png',
+              ),
+              ProductModel(
+                name: 'Fashion Collection',
+                price: 'LKR 2,299/-',
+                rating: 4.6,
+                reviews: 12,
+                imagePath: 'assets/product/fashion_02.png',
+              ),
+              ProductModel(
+                name: 'Beauty Pack',
+                price: 'LKR 3,899/-',
+                rating: 4.9,
+                reviews: 6,
+                imagePath: 'assets/product/cosmatic_01.png',
+              ),
+              ProductModel(
+                name: 'Home Essentials',
+                price: 'LKR 5,499/-',
                 rating: 4.5,
-                reviews: 2,
+                reviews: 4,
                 imagePath: 'assets/product/family_pack1.png',
-              ),
-              ProductModel(
-                name: 'Bhoomi One Shot',
-                price: 'LKR 360/-',
-                rating: 5.0,
-                reviews: 1,
-                imagePath: 'assets/product/oil_01.png',
-              ),
-              ProductModel(
-                name: 'Helapiyasa T-Shirt',
-                price: 'LKR 1,099/-',
-                rating: 5.0,
-                reviews: 1,
-                imagePath: 'assets/product/fashion_01.png',
               ),
             ]),
 
-            SizedBox(height: _getResponsiveValue(context, mobile: 24, tablet: 28, desktop: 32)),
+            SizedBox(height: screenWidth < 360 ? 20 : 24),
 
             // 📦 Packages
             _sectionTitle('Packages'),
-            _responsiveProductSection([
+            _mobileProductSection([
               ProductModel(
-                name: 'Family Package 1',
-                price: 'LKR 10,899/-',
-                rating: 4.5,
-                reviews: 2,
+                name: 'Starter Package',
+                price: 'LKR 4,999/-',
+                rating: 4.3,
+                reviews: 15,
                 imagePath: 'assets/product/family_pack1.png',
               ),
               ProductModel(
-                name: 'Bhoomi One Shot',
-                price: 'LKR 360/-',
-                rating: 5.0,
-                reviews: 1,
-                imagePath: 'assets/product/oil_01.png',
+                name: 'Premium Oil Set',
+                price: 'LKR 899/-',
+                rating: 4.8,
+                reviews: 9,
+                imagePath: 'assets/product/oil_02.png',
               ),
               ProductModel(
-                name: 'Helapiyasa T-Shirt',
-                price: 'LKR 1,099/-',
-                rating: 5.0,
-                reviews: 1,
-                imagePath: 'assets/product/fashion_01.png',
+                name: 'Fashion Bundle',
+                price: 'LKR 1,799/-',
+                rating: 4.7,
+                reviews: 7,
+                imagePath: 'assets/product/fashion_03.png',
+              ),
+              ProductModel(
+                name: 'Complete Set',
+                price: 'LKR 12,999/-',
+                rating: 4.9,
+                reviews: 11,
+                imagePath: 'assets/product/family_pack1.png',
               ),
             ]),
 
-            SizedBox(height: _getResponsiveValue(context, mobile: 24, tablet: 28, desktop: 32)),
+            SizedBox(height: screenWidth < 360 ? 20 : 24),
 
             // 🆕 New Arrivals
             Row(
@@ -256,43 +275,44 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
                   child: Text(
                     'View All',
                     style: TextStyle(
-                      fontSize: _getResponsiveValue(context, mobile: 14, tablet: 16, desktop: 18),
+                      fontSize: screenWidth < 360 ? 12 : 14,
+                      color: Colors.orange,
+                      fontWeight: FontWeight.w600,
                     ),
                   ),
                 ),
               ],
             ),
-            _responsiveProductSection([
+            _mobileProductSection([
               ProductModel(
-                name: 'Family Package 1',
-                price: 'LKR 10,899/-',
-                rating: 4.5,
+                name: 'Latest Fashion',
+                price: 'LKR 1,299/-',
+                rating: 4.8,
+                reviews: 3,
+                imagePath: 'assets/product/fashion_04.png',
+              ),
+              ProductModel(
+                name: 'New Electronics',
+                price: 'LKR 8,500/-',
+                rating: 4.6,
                 reviews: 2,
-                imagePath: 'assets/product/family_pack1.png',
+                imagePath: 'assets/product/electronic_02.png',
               ),
               ProductModel(
-                name: 'Bhoomi One Shot',
-                price: 'LKR 360/-',
-                rating: 5.0,
+                name: 'Fresh Cosmetics',
+                price: 'LKR 2,199/-',
+                rating: 4.9,
                 reviews: 1,
-                imagePath: 'assets/product/oil_01.png',
-              ),
-              ProductModel(
-                name: 'Helapiyasa T-Shirt',
-                price: 'LKR 1,099/-',
-                rating: 5.0,
-                reviews: 1,
-                imagePath: 'assets/product/fashion_01.png',
+                imagePath: 'assets/product/cosmatic_02.png',
               ),
             ]),
 
-            SizedBox(height: _getResponsiveValue(context, mobile: 24, tablet: 28, desktop: 32)),
-
+            SizedBox(height: screenWidth < 360 ? 20 : 24),
 
             // 🛍️ Shop By Brands
             _sectionTitle('Shop By Brands'),
-            SizedBox(height: _getResponsiveValue(context, mobile: 16, tablet: 20, desktop: 24)),
-            _responsiveBrandSection(),
+            SizedBox(height: screenWidth < 360 ? 12 : 16),
+            _mobileBrandSection(),
           ],
         ),
       ),
@@ -300,114 +320,89 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
   }
 
   Widget _sectionTitle(String title) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: _getResponsiveValue(context, mobile: 18, tablet: 22, desktop: 26),
-        fontWeight: FontWeight.bold,
+    final screenWidth = MediaQuery.of(context).size.width;
+    return Padding(
+      padding: EdgeInsets.only(bottom: screenWidth < 360 ? 8 : 10),
+      child: Text(
+        title,
+        style: TextStyle(
+          fontSize: screenWidth < 360 ? 16 : 18,
+          fontWeight: FontWeight.bold,
+          color: Colors.black87,
+        ),
       ),
     );
   }
 
   Widget _iconRow(List<IconData> icons) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: icons.map((icon) {
-        return Container(
-          padding: EdgeInsets.all(_getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20)),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.white,
-                Colors.white,
-              ],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 6,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Icon(
-            icon,
-            color: Colors.orange,
-            size: _getResponsiveValue(context, mobile: 24, tablet: 28, desktop: 32),
-          ),
-        );
-      }).toList(),
-    );
-  }
+    final screenWidth = MediaQuery.of(context).size.width;
+    final iconSize = screenWidth < 360 ? 20.0 : 24.0;
+    final containerSize = screenWidth < 360 ? 56.0 : 64.0;
+    final paddingSize = screenWidth < 360 ? 8.0 : 10.0;
 
-  // Grid layout for tablets and desktops
-  Widget _iconGrid(List<IconData> icons) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: _getCrossAxisCount(context),
-        crossAxisSpacing: _getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20),
-        mainAxisSpacing: _getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20),
-        childAspectRatio: 1.0,
+    return SizedBox(
+      height: containerSize + 10, // Extra space for better visual
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        padding: EdgeInsets.symmetric(horizontal: screenWidth < 360 ? 8 : 12),
+        itemCount: icons.length,
+        separatorBuilder: (_, __) => SizedBox(width: screenWidth < 360 ? 12 : 16),
+        physics: const BouncingScrollPhysics(), // Better scroll feeling
+        itemBuilder: (context, index) {
+          return GestureDetector(
+            onTap: () {
+              // Add onTap functionality here if needed
+              print('Category ${index + 1} tapped');
+            },
+            child: Container(
+              width: containerSize,
+              height: containerSize,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.08),
+                    blurRadius: 6,
+                    spreadRadius: 1,
+                    offset: const Offset(0, 3),
+                  ),
+                ],
+                border: Border.all(
+                  color: Colors.orange.withOpacity(0.2),
+                  width: 1,
+                ),
+              ),
+              child: Center(
+                child: Icon(
+                  icons[index],
+                  color: Colors.orange,
+                  size: iconSize,
+                ),
+              ),
+            ),
+          );
+        },
       ),
-      itemCount: icons.length,
-      itemBuilder: (context, index) {
-        return Container(
-          padding: EdgeInsets.all(_getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20)),
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                Colors.white,
-                Colors.white,
-              ],
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 6,
-                offset: const Offset(0, 3),
-              ),
-            ],
-          ),
-          child: Icon(
-            icons[index],
-            color: Colors.orange,
-            size: _getResponsiveValue(context, mobile: 24, tablet: 28, desktop: 32),
-          ),
-        );
-      },
     );
   }
 
-  // Responsive product section
-  Widget _responsiveProductSection(List<ProductModel> products) {
-    if (_isMobile(context)) {
-      return _horizontalProductRow(products);
-    } else {
-      return _productGrid(products);
-    }
-  }
-
-  Widget _horizontalProductRow(List<ProductModel> products) {
-    final cardWidth = _getResponsiveValue(context, mobile: 164, tablet: 200, desktop: 240);
-    final cardHeight = _getResponsiveValue(context, mobile: 240, tablet: 280, desktop: 320);
+  // Mobile-optimized product section
+  Widget _mobileProductSection(List<ProductModel> products) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardWidth = screenWidth < 360 ? 140.0 : 164.0;
+    final cardHeight = screenWidth < 360 ? 200.0 : 240.0;
 
     return Container(
+      margin: EdgeInsets.only(top: screenWidth < 360 ? 8 : 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(_getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20)),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
-            blurRadius: 8,
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 6,
             spreadRadius: 1,
-            offset: const Offset(0, 4),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -415,46 +410,28 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
         height: cardHeight,
         child: ListView.separated(
           scrollDirection: Axis.horizontal,
+          padding: EdgeInsets.symmetric(horizontal: screenWidth < 360 ? 8 : 12),
           itemCount: products.length,
-          separatorBuilder: (_, __) => SizedBox(width: _getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20)),
+          separatorBuilder: (_, __) => SizedBox(width: screenWidth < 360 ? 8 : 12),
           itemBuilder: (context, index) {
-            final product = products[index];
-            return _buildProductCard(product, cardWidth);
+            return _buildMobileProductCard(products[index], cardWidth);
           },
         ),
       ),
     );
   }
 
-  // Grid layout for tablets and desktops
-  Widget _productGrid(List<ProductModel> products) {
-    return GridView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: _getCrossAxisCount(context),
-        crossAxisSpacing: _getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20),
-        mainAxisSpacing: _getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20),
-        childAspectRatio: _getResponsiveValue(context, mobile: 0.75, tablet: 0.8, desktop: 0.85),
-      ),
-      itemCount: products.length,
-      itemBuilder: (context, index) {
-        final product = products[index];
-        return _buildProductCard(product, null);
-      },
-    );
-  }
-
-  Widget _buildProductCard(ProductModel product, double? width) {
-     final imageHeight = _getResponsiveValue(context, mobile: 136, tablet: 160, desktop: 180);
+  Widget _buildMobileProductCard(ProductModel product, double width) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final imageHeight = screenWidth < 360 ? 100.0 : 136.0;
+    final padding = screenWidth < 360 ? 6.0 : 8.0;
 
     return Container(
       width: width,
-      padding: EdgeInsets.all(_getResponsiveValue(context, mobile: 8, tablet: 12, desktop: 16)),
+      padding: EdgeInsets.all(padding),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(_getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20)),
-        // Removed card drop shadow
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -462,15 +439,27 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
         children: [
           // 🖼️ Product Image
           ClipRRect(
-            borderRadius: BorderRadius.circular(_getResponsiveValue(context, mobile: 8, tablet: 12, desktop: 16)),
+            borderRadius: BorderRadius.circular(8),
             child: Image.asset(
               product.imagePath,
               height: imageHeight,
-              width: width ?? _getResponsiveValue(context, mobile: 148, tablet: 180, desktop: 220), // Fixed: Use finite width instead of double.infinity
+              width: width - (padding * 2),
               fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                return Container(
+                  height: imageHeight,
+                  width: width - (padding * 2),
+                  color: Colors.grey[200],
+                  child: Icon(
+                    Icons.image_not_supported,
+                    color: Colors.grey[400],
+                    size: screenWidth < 360 ? 30 : 40,
+                  ),
+                );
+              },
             ),
           ),
-          SizedBox(height: _getResponsiveValue(context, mobile: 8, tablet: 10, desktop: 12)),
+          SizedBox(height: screenWidth < 360 ? 6 : 8),
 
           // 🏷️ Product Name
           Text(
@@ -478,8 +467,9 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
             style: TextStyle(
-              fontSize: _getResponsiveValue(context, mobile: 14, tablet: 16, desktop: 18),
+              fontSize: screenWidth < 360 ? 12 : 14,
               fontWeight: FontWeight.w600,
+              color: Colors.black87,
             ),
           ),
 
@@ -487,8 +477,9 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
           Text(
             product.price,
             style: TextStyle(
-              fontSize: _getResponsiveValue(context, mobile: 13, tablet: 15, desktop: 17),
+              fontSize: screenWidth < 360 ? 11 : 13,
               color: Colors.orange,
+              fontWeight: FontWeight.w500,
             ),
           ),
 
@@ -498,20 +489,21 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
               Icon(
                 Icons.star,
                 color: Colors.amber,
-                size: _getResponsiveValue(context, mobile: 14, tablet: 16, desktop: 18),
+                size: screenWidth < 360 ? 12 : 14,
               ),
-              SizedBox(width: _getResponsiveValue(context, mobile: 4, tablet: 6, desktop: 8)),
+              SizedBox(width: 2),
               Text(
                 '${product.rating}',
                 style: TextStyle(
-                  fontSize: _getResponsiveValue(context, mobile: 12, tablet: 14, desktop: 16),
+                  fontSize: screenWidth < 360 ? 10 : 12,
+                  color: Colors.black87,
                 ),
               ),
-              SizedBox(width: _getResponsiveValue(context, mobile: 6, tablet: 8, desktop: 10)),
+              SizedBox(width: 4),
               Text(
                 '(${product.reviews})',
                 style: TextStyle(
-                  fontSize: _getResponsiveValue(context, mobile: 11, tablet: 13, desktop: 15),
+                  fontSize: screenWidth < 360 ? 9 : 11,
                   color: Colors.grey,
                 ),
               ),
@@ -521,20 +513,20 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
           // 🔖 Best Deal Badge
           if (product.isBestDeal)
             Container(
-              margin: EdgeInsets.only(top: _getResponsiveValue(context, mobile: 4, tablet: 6, desktop: 8)),
+              margin: EdgeInsets.only(top: 4),
               padding: EdgeInsets.symmetric(
-                horizontal: _getResponsiveValue(context, mobile: 6, tablet: 8, desktop: 10),
-                vertical: _getResponsiveValue(context, mobile: 2, tablet: 4, desktop: 6),
+                horizontal: screenWidth < 360 ? 4 : 6,
+                vertical: 2,
               ),
               decoration: BoxDecoration(
                 color: Colors.red,
-                borderRadius: BorderRadius.circular(20),
+                borderRadius: BorderRadius.circular(10),
               ),
               child: Text(
                 'Best Deal',
                 style: TextStyle(
                   color: Colors.white,
-                  fontSize: _getResponsiveValue(context, mobile: 10, tablet: 12, desktop: 14),
+                  fontSize: screenWidth < 360 ? 8 : 10,
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -544,7 +536,8 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
     );
   }
 
-  Widget _responsiveBrandSection() {
+  Widget _mobileBrandSection() {
+    final screenWidth = MediaQuery.of(context).size.width;
     final brandImages = [
       'assets/brands/brand1.png',
       'assets/brands/brand2.png',
@@ -554,45 +547,58 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
       'assets/brands/brand6.png',
     ];
 
-    // Always use horizontal carousel for all screen sizes
     return SizedBox(
-      height: _getResponsiveValue(context, mobile: 56, tablet: 56, desktop: 56),
+      height: screenWidth < 360 ? 45 : 56,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         itemCount: brandImages.length,
-        separatorBuilder: (_, __) => SizedBox(width: _getResponsiveValue(context, mobile: 8, tablet: 12, desktop: 16)),
+        separatorBuilder: (_, __) => SizedBox(width: screenWidth < 360 ? 6 : 8),
         itemBuilder: (context, index) {
-          return _brandLogo(brandImages[index]);
+          return _mobileBrandLogo(brandImages[index]);
         },
       ),
     );
   }
 
-  Widget _brandLogo(String assetPath) {
+  Widget _mobileBrandLogo(String assetPath) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final logoWidth = screenWidth < 360 ? 120.0 : 145.0;
+    final logoHeight = screenWidth < 360 ? 45.0 : 56.0;
+
     return Container(
-      width: _getResponsiveValue(context, mobile: 145, tablet: 145, desktop: 145),
-      height: _getResponsiveValue(context, mobile: 56, tablet: 56, desktop: 56),
+      width: logoWidth,
+      height: logoHeight,
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(_getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20)),
+        borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 3,
-            offset: const Offset(0, 2),
+            color: Colors.black.withOpacity(0.03),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(_getResponsiveValue(context, mobile: 12, tablet: 16, desktop: 20)),
+        borderRadius: BorderRadius.circular(12),
         child: Padding(
           padding: EdgeInsets.symmetric(
-            horizontal: _getResponsiveValue(context, mobile: 8, tablet: 12, desktop: 16),
-            vertical: _getResponsiveValue(context, mobile: 8, tablet: 8, desktop: 8),
+            horizontal: screenWidth < 360 ? 6 : 8,
+            vertical: screenWidth < 360 ? 6 : 8,
           ),
           child: Image.asset(
             assetPath,
             fit: BoxFit.contain,
+            errorBuilder: (context, error, stackTrace) {
+              return Container(
+                color: Colors.grey[100],
+                child: Icon(
+                  Icons.image_not_supported,
+                  color: Colors.grey[400],
+                  size: screenWidth < 360 ? 20 : 24,
+                ),
+              );
+            },
           ),
         ),
       ),
