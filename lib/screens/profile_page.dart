@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'my_orders_page.dart';
 import 'edit_profile_page.dart';
+import 'address_details_page.dart';
+import 'payment_methods_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -149,14 +151,24 @@ class _ProfilePageState extends State<ProfilePage> {
                     icon: Icons.location_on_outlined,
                     title: 'Delivery Address',
                     subtitle: 'Manage your delivery addresses',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AddressDetailsPage()),
+                      );
+                    },
                   ),
                   _buildDivider(),
                   _buildMenuItem(
                     icon: Icons.payment_outlined,
                     title: 'Payment Methods',
                     subtitle: 'Manage your payment options',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const PaymentMethodsPage()),
+                      );
+                    },
                   ),
                 ],
               ),
