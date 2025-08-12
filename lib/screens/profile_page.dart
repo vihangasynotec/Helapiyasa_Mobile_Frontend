@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'my_orders_page.dart';
+import 'edit_profile_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -35,13 +37,8 @@ class _ProfilePageState extends State<ProfilePage> {
                       CircleAvatar(
                         radius: 50,
                         backgroundColor: Colors.orange[100],
-                        backgroundImage: const AssetImage('assets/brands/brand1.png'),
+                        backgroundImage: const AssetImage('assets/profile_img.png'),
                         onBackgroundImageError: (exception, stackTrace) {},
-                        child: const Icon(
-                          Icons.person,
-                          size: 50,
-                          color: Colors.orange,
-                        ),
                       ),
                       Positioned(
                         bottom: 0,
@@ -88,8 +85,17 @@ class _ProfilePageState extends State<ProfilePage> {
                   const SizedBox(height: 16),
                   // Edit Profile Button
                   ElevatedButton(
-                    onPressed: () {
-                      // Navigate to edit profile
+                    onPressed: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const EditProfilePage()),
+                      );
+                      if (result == true) {
+                        // Profile was updated, you can refresh the profile data here
+                        setState(() {
+                          // Refresh profile information if needed
+                        });
+                      }
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.orange,
@@ -131,14 +137,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     icon: Icons.shopping_bag_outlined,
                     title: 'My Orders',
                     subtitle: 'Track, return and buy things again',
-                    onTap: () {},
-                  ),
-                  _buildDivider(),
-                  _buildMenuItem(
-                    icon: Icons.favorite_outline,
-                    title: 'My Wishlist',
-                    subtitle: 'Your saved items',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MyOrdersPage()),
+                      );
+                    },
                   ),
                   _buildDivider(),
                   _buildMenuItem(

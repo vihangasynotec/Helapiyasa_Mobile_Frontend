@@ -53,6 +53,7 @@ flutter:
     - assets/brands/brand4.png
     - assets/brands/brand5.png
     - assets/brands/brand6.png
+    - assets/profile_img.png
   # Uncomment and configure if you plan to use custom fonts
   # fonts:
   #   - family: YourFontFamily
