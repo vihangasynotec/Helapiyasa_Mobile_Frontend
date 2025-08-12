@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'screens/shop_page.dart';
 import 'screens/main_dashboard_page.dart';
 import 'screens/dashboard_page.dart';
 import 'screens/register_page.dart';
@@ -37,6 +38,8 @@ class MyApp extends StatelessWidget {
         '/register_page2': (context) => const RegisterPersonalDetailsScreen(), // ✅ Second step
         '/dashboard_page': (context) => const DashboardPage(), // ✅ Second step
         '/main_dashboard_page': (context) => const MainDashboard_Page(), // ✅ Second step
+        '/shop_page': (context) => const ShopPage(),
+
       },
     );
   }

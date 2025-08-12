@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'main_dashboard_page.dart'; // Make sure this file exists
+import 'shop_page.dart';
+import 'main_dashboard_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -12,11 +13,19 @@ class _DashboardPageState extends State<DashboardPage> {
   int _selectedIndex = 0;
 
   // Define pages for each tab
-  final List<Widget> _pages = const [
-    MainDashboard_Page(), // Default Home
-    Center(child: Text('Shop Page')), // Placeholder
-    Center(child: Text('Cart Page')), // Placeholder
-    Center(child: Text('Profile Page')), // Placeholder
+  final List<Widget> _pages = [
+    const MainDashboard_Page(), // Default Home
+    Builder(
+      builder: (context) {
+        try {
+          return const ShopPage(); // ✅ Use const only if ShopPage is stateless and safe
+        } catch (e) {
+          return Center(child: Text('Error loading ShopPage: $e'));
+        }
+      },
+    ),
+    const Center(child: Text('Cart Page')), // Placeholder
+    const Center(child: Text('Profile Page')), // Placeholder
   ];
 
   @override
@@ -31,6 +40,8 @@ class _DashboardPageState extends State<DashboardPage> {
             Image.asset(
               'assets/logo.png',
               height: 32,
+              errorBuilder: (context, error, stackTrace) =>
+              const Icon(Icons.error, color: Colors.red),
             ),
             const Spacer(),
             IconButton(
@@ -111,9 +122,9 @@ class _DashboardPageState extends State<DashboardPage> {
         currentIndex: _selectedIndex,
         selectedItemColor: Colors.orange,
         unselectedItemColor: Colors.grey,
-        iconSize: 37, // Custom icon size
-        selectedFontSize: 12, // Optional: adjust label size when selected
-        unselectedFontSize: 10, // Optional: adjust label size when unselected
+        iconSize: 37,
+        selectedFontSize: 12,
+        unselectedFontSize: 10,
         items: const [
           BottomNavigationBarItem(
             icon: Icon(Icons.grid_view),
