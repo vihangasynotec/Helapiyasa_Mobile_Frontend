@@ -13,11 +13,26 @@ class _ShopPageState extends State<ShopPage> {
 
   List<ProductModel> filteredProducts = sampleProducts;
   String selectedCategory = 'All';
+  String selectedBrand = 'All'; // Added brand filter
   double minPrice = 0;
   double maxPrice = 20000;
   double selectedRating = 0;
   bool showBestDealsOnly = false;
   String sortBy = 'None'; // Added sort option
+
+  // Brand list for filtering
+  final List<String> brands = [
+    'All',
+    'Helapiyasa',
+    'JBL',
+    'Samsung',
+    'Apple',
+    'Sony',
+    'Nike',
+    'Adidas',
+    'L\'Oreal',
+    'Nivea',
+  ];
 
   void _showFilterDialog() {
     showDialog(
@@ -100,6 +115,45 @@ class _ShopPageState extends State<ShopPage> {
                                   checkmarkColor: Colors.orange,
                                 ))
                             .toList(),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Brand Filter Section
+                      const Text(
+                        'Filter by Brands',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Container(
+                        height: 120, // Fixed height for scrollable area
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Colors.grey.withOpacity(0.3)),
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: SingleChildScrollView(
+                          child: Wrap(
+                            spacing: 8,
+                            children: brands
+                                .map((brand) => FilterChip(
+                                      label: Text(brand),
+                                      selected: selectedBrand == brand,
+                                      onSelected: (selected) {
+                                        setStateDialog(() {
+                                          selectedBrand = brand;
+                                        });
+                                      },
+                                      selectedColor: Colors.orange.withOpacity(0.3),
+                                      checkmarkColor: Colors.orange,
+                                      avatar: brand != 'All'
+                                          ? const Icon(Icons.business, size: 16, color: Colors.orange)
+                                          : null,
+                                    ))
+                                .toList(),
+                          ),
+                        ),
                       ),
                       const SizedBox(height: 20),
 
@@ -191,6 +245,7 @@ class _ShopPageState extends State<ShopPage> {
                   onPressed: () {
                     setStateDialog(() {
                       selectedCategory = 'All';
+                      selectedBrand = 'All'; // Reset brand filter
                       minPrice = 0;
                       maxPrice = 20000;
                       selectedRating = 0;
@@ -231,6 +286,11 @@ class _ShopPageState extends State<ShopPage> {
           return false;
         }
 
+        // Brand filter
+        if (selectedBrand != 'All' && !_productMatchesBrand(product, selectedBrand)) {
+          return false;
+        }
+
         // Price filter
         if (product.price < minPrice || product.price > maxPrice) {
           return false;
@@ -257,6 +317,42 @@ class _ShopPageState extends State<ShopPage> {
       }
       // If sortBy is 'None', keep original order
     });
+  }
+
+  // Helper method to match products with brands
+  bool _productMatchesBrand(ProductModel product, String brand) {
+    // Simple brand matching logic based on product name
+    switch (brand) {
+      case 'Helapiyasa':
+        return product.name.toLowerCase().contains('helapiyasa');
+      case 'DELL':
+        return product.description.toLowerCase().contains('jbl') ||
+               product.name.toLowerCase().contains('jbl');
+      case 'Wijaya':
+        return product.name.toLowerCase().contains('samsung') ||
+               product.description.toLowerCase().contains('samsung');
+      case 'Prima':
+        return product.name.toLowerCase().contains('iphone') ||
+               product.name.toLowerCase().contains('apple') ||
+               product.description.toLowerCase().contains('apple');
+      case 'Abans':
+        return product.name.toLowerCase().contains('sony') ||
+               product.description.toLowerCase().contains('sony');
+      case 'CBL':
+        return product.name.toLowerCase().contains('nike') ||
+               product.description.toLowerCase().contains('nike');
+      case 'Adidas':
+        return product.name.toLowerCase().contains('adidas') ||
+               product.description.toLowerCase().contains('adidas');
+      case 'L\'Oreal':
+        return product.name.toLowerCase().contains('loreal') ||
+               product.description.toLowerCase().contains('loreal');
+      case 'SINGER':
+        return product.name.toLowerCase().contains('nivea') ||
+               product.description.toLowerCase().contains('nivea');
+      default:
+        return false;
+    }
   }
 
   @override
@@ -287,6 +383,7 @@ class _ShopPageState extends State<ShopPage> {
         children: [
           // Filter Summary
           if (selectedCategory != 'All' ||
+              selectedBrand != 'All' ||
               minPrice > 0 ||
               maxPrice < 20000 ||
               selectedRating > 0 ||
@@ -311,6 +408,7 @@ class _ShopPageState extends State<ShopPage> {
                     onPressed: () {
                       setState(() {
                         selectedCategory = 'All';
+                        selectedBrand = 'All';
                         minPrice = 0;
                         maxPrice = 20000;
                         selectedRating = 0;
@@ -395,9 +493,11 @@ class _ShopPageState extends State<ShopPage> {
     List<String> filters = [];
 
     if (selectedCategory != 'All') filters.add(selectedCategory);
+    if (selectedBrand != 'All') filters.add(selectedBrand); // Add brand to summary
     if (minPrice > 0 || maxPrice < 20000) filters.add('Price');
     if (selectedRating > 0) filters.add('Rating ${selectedRating.toInt()}+');
     if (showBestDealsOnly) filters.add('Best Deals');
+    if (sortBy != 'None') filters.add('Sorted');
 
     return filters.join(', ');
   }

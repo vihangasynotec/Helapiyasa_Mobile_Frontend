@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:helapiya_mobile_app/models/productModel.dart';
 
@@ -18,11 +19,17 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
 
   int _currentPage = 0;
   Timer? _timer;
+  Timer? _hotDealsTimer; // Added timer for hot deals countdown
+
+  // Hot deals countdown timer (24 hours from now)
+  DateTime _hotDealsEndTime = DateTime.now().add(const Duration(hours: 24));
+  String _timeRemaining = '02:11:40'; // Initial time remaining
 
   @override
   void initState() {
     super.initState();
     _startAutoSlide();
+    _startHotDealsTimer(); // Start the hot deals countdown
   }
 
   void _startAutoSlide() {
@@ -40,9 +47,36 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
     });
   }
 
+  void _startHotDealsTimer() {
+    _updateHotDealsTimer(); // Initial update
+    _hotDealsTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) {
+      _updateHotDealsTimer();
+    });
+  }
+
+  void _updateHotDealsTimer() {
+    final now = DateTime.now();
+    final difference = _hotDealsEndTime.difference(now);
+
+    if (difference.isNegative) {
+      // Timer expired, reset for next 24 hours
+      _hotDealsEndTime = DateTime.now().add(const Duration(hours: 24));
+      return;
+    }
+
+    final hours = difference.inHours;
+    final minutes = difference.inMinutes % 60;
+    final seconds = difference.inSeconds % 60;
+
+    setState(() {
+      _timeRemaining = '${hours.toString().padLeft(2, '0')}:${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+    });
+  }
+
   @override
   void dispose() {
     _timer?.cancel();
+    _hotDealsTimer?.cancel(); // Cancel hot deals timer
     _pageController.dispose();
     super.dispose();
   }
@@ -149,6 +183,43 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
             ),
             SizedBox(height: screenWidth < 360 ? 20 : 24),
 
+            // Hot Deals Countdown Timer
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Hurry Up! Hot Deals Ending In:',
+                    style: TextStyle(
+                      fontSize: screenWidth < 360 ? 14 : 16,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black87,
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: screenWidth < 360 ? 8 : 12,
+                      vertical: screenWidth < 360 ? 4 : 6,
+                    ),
+                    decoration: BoxDecoration(
+                      color: Colors.red,
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      _timeRemaining,
+                      style: TextStyle(
+                        fontSize: screenWidth < 360 ? 14 : 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+
             // 🔥 Hot Deals
             _sectionTitle('Hot Deals'),
             _mobileProductSection([
@@ -207,6 +278,8 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
                 category: 'Food',
               ),
             ]),
+
+
 
             SizedBox(height: screenWidth < 360 ? 20 : 24),
 

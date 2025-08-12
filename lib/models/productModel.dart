@@ -61,7 +61,7 @@ final List<ProductModel> sampleProducts = [
   ),
   ProductModel(
     id: 'p4',
-    name: 'Coconut Oil',
+    name: 'Bhoomi Oneshot',
     description: 'Pure coconut oil from helapiyasa',
     price: 1899,
     imagePath: 'assets/product/oil_01.png',
@@ -71,10 +71,10 @@ final List<ProductModel> sampleProducts = [
   ),
   ProductModel(
     id: 'p5',
-    name: 'Beauty Cream',
+    name: 'JBL PartyBox Stage 320',
     description: 'Premium cosmetic cream',
     price: 2499,
-    imagePath: 'assets/product/cosmatic_01.png',
+    imagePath: 'assets/product/electronic_01.png',
     rating: 4.8,
     reviews: 92,
     category: 'Cosmetics',
@@ -82,7 +82,7 @@ final List<ProductModel> sampleProducts = [
   ),
   ProductModel(
     id: 'p6',
-    name: 'Gaming Headset',
+    name: 'Singer Ovuen',
     description: 'High quality gaming headset',
     price: 8999,
     imagePath: 'assets/product/electronic_02.png',
@@ -92,8 +92,8 @@ final List<ProductModel> sampleProducts = [
   ),
   ProductModel(
     id: 'p7',
-    name: 'Ladies Top',
-    description: 'Trendy fashion top for women',
+    name: 'Helapiyasa T-Shirt Black',
+    description: 'Trendy fashion top for Helapiyasa Fans',
     price: 1299,
     imagePath: 'assets/product/fashion_02.png',
     rating: 4.4,
@@ -102,7 +102,7 @@ final List<ProductModel> sampleProducts = [
   ),
   ProductModel(
     id: 'p8',
-    name: 'Cooking Oil',
+    name: 'Bhoomi Coconut Spread',
     description: 'Healthy cooking oil',
     price: 1599,
     imagePath: 'assets/product/oil_02.png',
