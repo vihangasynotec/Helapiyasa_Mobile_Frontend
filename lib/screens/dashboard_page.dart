@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'shop_page.dart';
 import 'main_dashboard_page.dart';
+import 'cart_page.dart';
+import 'favorites_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -18,15 +20,24 @@ class _DashboardPageState extends State<DashboardPage> {
     Builder(
       builder: (context) {
         try {
-          return const ShopPage(); // ✅ Use const only if ShopPage is stateless and safe
+          return const ShopPage(); //
         } catch (e) {
           return Center(child: Text('Error loading ShopPage: $e'));
         }
       },
     ),
-    const Center(child: Text('Cart Page')), // Placeholder
+    const CartPage(), // Now properly navigates to cart page
     const Center(child: Text('Profile Page')), // Placeholder
   ];
+
+
+
+  void _navigateToFavorites() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const FavoritesPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,15 +55,12 @@ class _DashboardPageState extends State<DashboardPage> {
               const Icon(Icons.error, color: Colors.red),
             ),
             const Spacer(),
-            IconButton(
-              icon: const Icon(Icons.settings, color: Colors.orange),
-              onPressed: () {},
-            ),
+
             Stack(
               children: [
                 IconButton(
                   icon: const Icon(Icons.favorite_border, color: Colors.orange),
-                  onPressed: () {},
+                  onPressed: _navigateToFavorites, // Navigate to favorites page when favorite icon is pressed
                 ),
                 Positioned(
                   right: 6,

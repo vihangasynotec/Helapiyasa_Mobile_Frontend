@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/productModel.dart';
+import 'checkout_page.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({Key? key}) : super(key: key);
@@ -23,7 +24,7 @@ class _CartPageState extends State<CartPage> {
         imagePath: 'assets/product/family_pack1.png',
         category: 'Packages',
       ),
-      quantity: 2,
+      quantity: 5,
     ),
     CartItem(
       product: ProductModel(
@@ -50,7 +51,7 @@ class _CartPageState extends State<CartPage> {
         imagePath: 'assets/product/cosmatic_01.png',
         category: 'Cosmetics',
       ),
-      quantity: 1,
+      quantity: 3,
     ),
   ];
 
@@ -69,15 +70,11 @@ class _CartPageState extends State<CartPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Colors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
         title: const Text(
           'Shopping Cart',
           style: TextStyle(
             color: Colors.black,
-            fontSize: 24,
+            fontSize: 18,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -131,19 +128,6 @@ class _CartPageState extends State<CartPage> {
             ),
           ),
           const SizedBox(height: 32),
-          ElevatedButton.icon(
-            onPressed: () => Navigator.pop(context),
-            icon: const Icon(Icons.shopping_bag),
-            label: const Text('Start Shopping'),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.orange,
-              foregroundColor: Colors.white,
-              padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
-            ),
-          ),
         ],
       ),
     );
@@ -204,7 +188,7 @@ class _CartPageState extends State<CartPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -376,7 +360,7 @@ class _CartPageState extends State<CartPage> {
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -461,7 +445,7 @@ class _CartPageState extends State<CartPage> {
         color: Colors.white,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Colors.black.withValues(alpha: 0.1),
             blurRadius: 8,
             offset: const Offset(0, -2),
           ),
@@ -601,11 +585,13 @@ class _CartPageState extends State<CartPage> {
   }
 
   void _proceedToCheckout() {
-    // TODO: Implement checkout logic
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Proceeding to checkout...'),
-        backgroundColor: Colors.orange,
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CheckoutPage(
+          cartItems: cartItems,
+          total: subtotal,
+        ),
       ),
     );
   }
