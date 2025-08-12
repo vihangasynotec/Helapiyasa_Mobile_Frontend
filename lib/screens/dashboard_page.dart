@@ -3,6 +3,7 @@ import 'shop_page.dart';
 import 'main_dashboard_page.dart';
 import 'cart_page.dart';
 import 'favorites_page.dart';
+import 'profile_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -27,10 +28,8 @@ class _DashboardPageState extends State<DashboardPage> {
       },
     ),
     const CartPage(), // Now properly navigates to cart page
-    const Center(child: Text('Profile Page')), // Placeholder
+    const ProfilePage(), // Updated to use the new ProfilePage
   ];
-
-
 
   void _navigateToFavorites() {
     Navigator.push(
@@ -52,7 +51,7 @@ class _DashboardPageState extends State<DashboardPage> {
               'assets/logo.png',
               height: 32,
               errorBuilder: (context, error, stackTrace) =>
-              const Icon(Icons.error, color: Colors.red),
+                  const Icon(Icons.error, color: Colors.red),
             ),
             const Spacer(),
 
