@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:helapiya_mobile_app/models/productModel.dart';
+import 'product_detail_page.dart';
 
 class MainDashboard_Page extends StatefulWidget {
   const MainDashboard_Page({Key? key}) : super(key: key);
@@ -203,15 +204,23 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
                       vertical: screenWidth < 360 ? 4 : 6,
                     ),
                     decoration: BoxDecoration(
-                      color: Colors.red,
+                      color: Colors.white,
                       borderRadius: BorderRadius.circular(12),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withOpacity(0.05),
+                          blurRadius: 6,
+                          spreadRadius: 1,
+                          offset: const Offset(0, 3),
+                        ),
+                      ],
                     ),
                     child: Text(
                       _timeRemaining,
                       style: TextStyle(
                         fontSize: screenWidth < 360 ? 14 : 16,
                         fontWeight: FontWeight.w600,
-                        color: Colors.white,
+                        color: Colors.red,
                       ),
                     ),
                   ),
@@ -547,112 +556,223 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
     final imageHeight = screenWidth < 360 ? 100.0 : 136.0;
     final padding = screenWidth < 360 ? 6.0 : 8.0;
 
-    return Container(
-      width: width,
-      padding: EdgeInsets.all(padding),
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          // 🖼️ Product Image
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.asset(
-              product.imagePath,
-              height: imageHeight,
-              width: width - (padding * 2),
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Container(
-                  height: imageHeight,
-                  width: width - (padding * 2),
-                  color: Colors.grey[200],
-                  child: Icon(
-                    Icons.image_not_supported,
-                    color: Colors.grey[400],
-                    size: screenWidth < 360 ? 30 : 40,
+    // Calculate discount percentage for hot deals
+    double? discountPercentage;
+    if (product.isBestDeal) {
+      // Sample discount calculation - you can customize this logic
+      switch (product.id) {
+        case 'hd1': // Family Package 1
+          discountPercentage = 25.0; // 25% off
+          break;
+        case 'hd2': // Bhoomi One Shot
+          discountPercentage = 15.0; // 15% off
+          break;
+        case 'hd3': // Helapiyasa T-Shirt
+          discountPercentage = 30.0; // 30% off
+          break;
+        case 'hd4': // Family Package 2
+          discountPercentage = 20.0; // 20% off
+          break;
+        case 'hd5': // Natural Oil
+          discountPercentage = 40.0; // 40% off
+          break;
+        default:
+          discountPercentage = 20.0; // Default discount for other best deals
+      }
+    }
+
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => ProductDetailPage(product: product),
+          ),
+        );
+      },
+      child: Container(
+        width: width,
+        padding: EdgeInsets.all(padding),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // 🖼️ Product Image with Discount Badge
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Image.asset(
+                    product.imagePath,
+                    height: imageHeight,
+                    width: width - (padding * 2),
+                    fit: BoxFit.cover,
+                    errorBuilder: (context, error, stackTrace) {
+                      return Container(
+                        height: imageHeight,
+                        width: width - (padding * 2),
+                        color: Colors.grey[200],
+                        child: Icon(
+                          Icons.image_not_supported,
+                          color: Colors.grey[400],
+                          size: screenWidth < 360 ? 30 : 40,
+                        ),
+                      );
+                    },
                   ),
-                );
-              },
-            ),
-          ),
-          SizedBox(height: screenWidth < 360 ? 6 : 8),
-
-          // 🏷️ Product Name
-          Text(
-            product.name,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: TextStyle(
-              fontSize: screenWidth < 360 ? 12 : 14,
-              fontWeight: FontWeight.w600,
-              color: Colors.black87,
-            ),
-          ),
-
-          // 💰 Price
-          Text(
-            product.formattedPrice,
-            style: TextStyle(
-              fontSize: screenWidth < 360 ? 11 : 13,
-              color: Colors.orange,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-
-          // ⭐ Rating & Reviews
-          Row(
-            children: [
-              Icon(
-                Icons.star,
-                color: Colors.amber,
-                size: screenWidth < 360 ? 12 : 14,
-              ),
-              SizedBox(width: 2),
-              Text(
-                '${product.rating}',
-                style: TextStyle(
-                  fontSize: screenWidth < 360 ? 10 : 12,
-                  color: Colors.black87,
                 ),
-              ),
-              SizedBox(width: 4),
-              Text(
-                '(${product.reviews})',
-                style: TextStyle(
-                  fontSize: screenWidth < 360 ? 9 : 11,
-                  color: Colors.grey,
-                ),
-              ),
-            ],
-          ),
 
-          // 🔖 Best Deal Badge
-          if (product.isBestDeal)
-            Container(
-              margin: EdgeInsets.only(top: 4),
-              padding: EdgeInsets.symmetric(
-                horizontal: screenWidth < 360 ? 4 : 6,
-                vertical: 2,
-              ),
-              decoration: BoxDecoration(
-                color: Colors.red,
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: Text(
-                'Best Deal',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: screenWidth < 360 ? 8 : 10,
-                  fontWeight: FontWeight.bold,
-                ),
+                // Discount Percentage Badge
+                if (discountPercentage != null)
+                  Positioned(
+                    top: 8,
+                    left: 8,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth < 360 ? 6 : 8,
+                        vertical: screenWidth < 360 ? 2 : 4,
+                      ),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Colors.red, Colors.red.shade600],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(12),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.red.withOpacity(0.3),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.local_offer,
+                            color: Colors.white,
+                            size: screenWidth < 360 ? 10 : 12,
+                          ),
+                          SizedBox(width: 2),
+                          Text(
+                            '${discountPercentage.toInt()}% OFF',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: screenWidth < 360 ? 8 : 10,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+
+                // Best Deal Badge (moved to top-right)
+                if (product.isBestDeal)
+                  Positioned(
+                    top: 8,
+                    right: 8,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: screenWidth < 360 ? 4 : 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.orange,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.orange.withOpacity(0.3),
+                            blurRadius: 3,
+                            offset: const Offset(0, 1),
+                          ),
+                        ],
+                      ),
+                      child: Text(
+                        'HOT',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: screenWidth < 360 ? 7 : 8,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            SizedBox(height: screenWidth < 360 ? 6 : 8),
+
+            // 🏷️ Product Name
+            Text(
+              product.name,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                fontSize: screenWidth < 360 ? 12 : 14,
+                fontWeight: FontWeight.w600,
+                color: Colors.black87,
               ),
             ),
-        ],
+
+            // 💰 Price with Discount
+            Row(
+              children: [
+                Text(
+                  product.formattedPrice,
+                  style: TextStyle(
+                    fontSize: screenWidth < 360 ? 11 : 13,
+                    color: Colors.orange,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                if (discountPercentage != null) ...[
+                  SizedBox(width: 4),
+                  Text(
+                    'LKR ${(product.price / (1 - discountPercentage / 100)).toInt()}/-',
+                    style: TextStyle(
+                      fontSize: screenWidth < 360 ? 9 : 11,
+                      color: Colors.grey,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                ],
+              ],
+            ),
+
+            // ⭐ Rating & Reviews
+            Row(
+              children: [
+                Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                  size: screenWidth < 360 ? 12 : 14,
+                ),
+                SizedBox(width: 2),
+                Text(
+                  '${product.rating}',
+                  style: TextStyle(
+                    fontSize: screenWidth < 360 ? 10 : 12,
+                    color: Colors.black87,
+                  ),
+                ),
+                SizedBox(width: 4),
+                Text(
+                  '(${product.reviews})',
+                  style: TextStyle(
+                    fontSize: screenWidth < 360 ? 9 : 11,
+                    color: Colors.grey,
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

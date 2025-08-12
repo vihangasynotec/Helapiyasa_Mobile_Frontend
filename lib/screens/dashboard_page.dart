@@ -45,13 +45,13 @@ class _DashboardPageState extends State<DashboardPage> {
             ),
             const Spacer(),
             IconButton(
-              icon: const Icon(Icons.settings, color: Colors.black),
+              icon: const Icon(Icons.settings, color: Colors.orange),
               onPressed: () {},
             ),
             Stack(
               children: [
                 IconButton(
-                  icon: const Icon(Icons.shopping_cart, color: Colors.black),
+                  icon: const Icon(Icons.favorite_border, color: Colors.orange),
                   onPressed: () {},
                 ),
                 Positioned(
