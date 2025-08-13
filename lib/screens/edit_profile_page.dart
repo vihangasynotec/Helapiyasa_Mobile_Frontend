@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class EditProfilePage extends StatefulWidget {
   const EditProfilePage({Key? key}) : super(key: key);
@@ -19,6 +21,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
   bool _isLoading = false;
   String _selectedGender = 'Male';
   DateTime? _selectedDate;
+  File? _profileImage;
 
   @override
   void initState() {
@@ -81,7 +84,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       CircleAvatar(
                         radius: 60,
                         backgroundColor: Colors.orange[100],
-                        backgroundImage: const AssetImage('assets/profile_img.png'),
+                        backgroundImage: _profileImage != null
+                            ? FileImage(_profileImage!)
+                            : const AssetImage('assets/profile_img.png'),
                         onBackgroundImageError: (exception, stackTrace) {},
                       ),
                       Positioned(
@@ -505,8 +510,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   label: 'Camera',
                   onTap: () {
                     Navigator.pop(context);
-                    // Handle camera selection
-                    _showSuccessMessage('Camera selected');
+                    _pickImage(ImageSource.camera);
                   },
                 ),
                 _buildImageSourceOption(
@@ -514,8 +518,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   label: 'Gallery',
                   onTap: () {
                     Navigator.pop(context);
-                    // Handle gallery selection
-                    _showSuccessMessage('Gallery selected');
+                    _pickImage(ImageSource.gallery);
                   },
                 ),
                 _buildImageSourceOption(
@@ -524,8 +527,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   color: Colors.red,
                   onTap: () {
                     Navigator.pop(context);
-                    // Handle remove picture
-                    _showSuccessMessage('Profile picture removed');
+                    _removeProfilePicture();
                   },
                 ),
               ],
@@ -573,6 +575,30 @@ class _EditProfilePageState extends State<EditProfilePage> {
     );
   }
 
+  void _pickImage(ImageSource source) async {
+    try {
+      final pickedFile = await ImagePicker().pickImage(
+        source: source,
+        imageQuality: 80,
+      );
+      if (pickedFile != null) {
+        setState(() {
+          _profileImage = File(pickedFile.path);
+        });
+        _showSuccessMessage('Profile picture updated');
+      }
+    } catch (e) {
+      _showErrorMessage('Failed to pick image: $e');
+    }
+  }
+
+  void _removeProfilePicture() {
+    setState(() {
+      _profileImage = null;
+    });
+    _showSuccessMessage('Profile picture removed');
+  }
+
   void _saveProfile() async {
     if (_formKey.currentState!.validate()) {
       setState(() {
@@ -606,6 +632,27 @@ class _EditProfilePageState extends State<EditProfilePage> {
           ],
         ),
         backgroundColor: Colors.green,
+        duration: const Duration(seconds: 2),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        margin: const EdgeInsets.all(16),
+      ),
+    );
+  }
+
+  void _showErrorMessage(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Row(
+          children: [
+            const Icon(Icons.error, color: Colors.white),
+            const SizedBox(width: 8),
+            Text(message, style: const TextStyle(fontSize: 16)),
+          ],
+        ),
+        backgroundColor: Colors.red,
         duration: const Duration(seconds: 2),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(

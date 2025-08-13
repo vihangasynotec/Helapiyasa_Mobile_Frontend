@@ -3,6 +3,7 @@ import 'my_orders_page.dart';
 import 'edit_profile_page.dart';
 import 'address_details_page.dart';
 import 'payment_methods_page.dart';
+import 'about_page.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({Key? key}) : super(key: key);
@@ -218,7 +219,12 @@ class _ProfilePageState extends State<ProfilePage> {
                     icon: Icons.info_outline,
                     title: 'About',
                     subtitle: 'App version and information',
-                    onTap: () {},
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const AboutPage()),
+                      );
+                    },
                   ),
                 ],
               ),

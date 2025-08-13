@@ -13,6 +13,7 @@ class MainDashboard_Page extends StatefulWidget {
 
 class _MainDashboard_PageState extends State<MainDashboard_Page> {
   final PageController _pageController = PageController();
+  final TextEditingController _searchController = TextEditingController();
   final List<String> bannerImages = [
     'assets/banner1.png',
     'assets/banner2.png',
@@ -20,11 +21,71 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
 
   int _currentPage = 0;
   Timer? _timer;
-  Timer? _hotDealsTimer; // Added timer for hot deals countdown
+  Timer? _hotDealsTimer;
+  String _searchQuery = '';
+
+  // Category data with items
+  final List<Map<String, dynamic>> _categories = [
+    {
+      'id': 1,
+      'name': 'Electronics',
+      'icon': 'assets/category/ca_icon1.png',
+      'color': Colors.blue,
+      'items': ['Smartphones', 'Laptops', 'Headphones', 'Cameras', 'Smart Watch', 'Tablets']
+    },
+    {
+      'id': 2,
+      'name': 'Fashion',
+      'icon': 'assets/category/ca_icon2.png',
+      'color': Colors.pink,
+      'items': ['Men\'s Clothing', 'Women\'s Clothing', 'Shoes', 'Bags', 'Accessories', 'Jewelry']
+    },
+    {
+      'id': 3,
+      'name': 'Beauty',
+      'icon': 'assets/category/ca_icon3.png',
+      'color': Colors.purple,
+      'items': ['Skincare', 'Makeup', 'Hair Care', 'Perfumes', 'Body Care', 'Nail Care']
+    },
+    {
+      'id': 4,
+      'name': 'Home & Living',
+      'icon': 'assets/category/ca_icon4.png',
+      'color': Colors.green,
+      'items': ['Furniture', 'Kitchen', 'Bedding', 'Decor', 'Storage', 'Lighting']
+    },
+    {
+      'id': 5,
+      'name': 'Food & Grocery',
+      'icon': 'assets/category/ca_icon5.png',
+      'color': Colors.orange,
+      'items': ['Fresh Produce', 'Dairy', 'Beverages', 'Snacks', 'Cooking Oil', 'Spices']
+    },
+    {
+      'id': 6,
+      'name': 'Sports & Fitness',
+      'icon': 'assets/category/ca_icon6.png',
+      'color': Colors.red,
+      'items': ['Gym Equipment', 'Sports Wear', 'Outdoor Gear', 'Yoga & Fitness', 'Team Sports', 'Swimming']
+    },
+  ];
 
   // Hot deals countdown timer (24 hours from now)
   DateTime _hotDealsEndTime = DateTime.now().add(const Duration(hours: 24));
   String _timeRemaining = '02:11:40'; // Initial time remaining
+
+  // Get filtered categories based on search query
+  List<Map<String, dynamic>> get _filteredCategories {
+    if (_searchQuery.isEmpty) {
+      return _categories;
+    }
+    return _categories.where((category) {
+      final categoryName = category['name'].toString().toLowerCase();
+      final items = category['items'] as List<String>;
+      final itemsMatch = items.any((item) => item.toLowerCase().contains(_searchQuery.toLowerCase()));
+      return categoryName.contains(_searchQuery.toLowerCase()) || itemsMatch;
+    }).toList();
+  }
 
   @override
   void initState() {
@@ -841,6 +902,136 @@ class _MainDashboard_PageState extends State<MainDashboard_Page> {
               );
             },
           ),
+        ),
+      ),
+    );
+  }
+
+  void _showCategoryDetails(Map<String, dynamic> category) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (context) => Container(
+        height: MediaQuery.of(context).size.height * 0.7,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20),
+            topRight: Radius.circular(20),
+          ),
+        ),
+        child: Column(
+          children: [
+            // Handle bar
+            Container(
+              width: 40,
+              height: 4,
+              margin: const EdgeInsets.only(top: 12),
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(2),
+              ),
+            ),
+
+            // Header
+            Padding(
+              padding: const EdgeInsets.all(20),
+              child: Row(
+                children: [
+                  Container(
+                    width: 50,
+                    height: 50,
+                    decoration: BoxDecoration(
+                      color: (category['color'] as Color).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.asset(
+                        category['icon'],
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.category,
+                            color: category['color'] as Color,
+                            size: 30,
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          category['name'],
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black87,
+                          ),
+                        ),
+                        Text(
+                          '${(category['items'] as List<String>).length} items available',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  IconButton(
+                    onPressed: () => Navigator.pop(context),
+                    icon: const Icon(Icons.close, color: Colors.grey),
+                  ),
+                ],
+              ),
+            ),
+
+            // Items Grid
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 12,
+                  mainAxisSpacing: 12,
+                  childAspectRatio: 3,
+                ),
+                itemCount: (category['items'] as List<String>).length,
+                itemBuilder: (context, index) {
+                  final item = (category['items'] as List<String>)[index];
+                  return Container(
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: (category['color'] as Color).withOpacity(0.1),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: (category['color'] as Color).withOpacity(0.3),
+                      ),
+                    ),
+                    child: Center(
+                      child: Text(
+                        item,
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w600,
+                          color: category['color'] as Color,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+
+            const SizedBox(height: 20),
+          ],
         ),
       ),
     );
